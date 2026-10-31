@@ -11,6 +11,8 @@ Artigo técnico da disciplina de Engenharia de Software I (IFPR, Campus Pinhais)
 ## Estrutura
 
 ```
+sbc-template.sty    # modelo SBC
+sbc.bst             # estilo bibliográfico SBC
 main.tex            # preâmbulo, título, autores e \input das seções
 secoes/             # uma seção por arquivo
 referencias.bib     # bibliografia (estilo sbc)
@@ -19,7 +21,7 @@ Makefile
 
 ## Compilar
 
-Precisa do `sbc-template.sty` e do `sbc.bst` do [modelo SBC](https://www.sbc.org.br/documentos-da-sbc/summary/169-templates-para-artigos-e-capitulos-de-livros/878-modelosparapublicaodeartigos) na raiz do projeto.
+O `sbc-template.sty` e o `sbc.bst` já estão na raiz, vindos do [modelo de artigos da SBC](https://www.sbc.org.br/wp-content/uploads/2024/07/modelosparapublicaodeartigos.zip).
 
 ```bash
 make        # latexmk -pdf -bibtex → main.pdf
