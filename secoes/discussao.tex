@@ -29,7 +29,7 @@
 
 \begin{enumerate}
   \item \textbf{Integrar o Sonar ao CI com \textit{Quality Gate} bloqueante}, gerando os relatórios de cobertura (\texttt{pcov} e V8) no próprio \textit{pipeline}, para que regressões de qualidade e de cobertura reprovem o PR.
-  \item \textbf{Reforçar a proteção de \textit{branch} da \texttt{main}}, exigindo ao menos uma aprovação de outro integrante e aplicando a regra também a administradores, e fazer da homologação um \textit{check} obrigatório, e dividir a autoria entre os integrantes para que a revisão por pares exista de fato.
+  \item \textbf{Reforçar a proteção de \textit{branch} da \texttt{main}}, exigindo ao menos uma aprovação de outro integrante aplicando a regra também a administradores e tornando a homologação um \textit{check} obrigatório. Dividir a autoria entre os integrantes é o que faz a revisão por pares existir de fato.
   \item \textbf{Aplicar testes de mutação} nos módulos de maior risco (cálculo de nota, desempate e prazo) e acrescentar testes de ponta a ponta do fluxo crítico (submissão, avaliação e resultado) no CI.
   \item \textbf{Escrever testes junto com cada funcionalidade}, inclusive no \textit{front-end}, em vez de em um lote final.
   \item \textbf{Registrar as decisões como ADRs}, em especial a aceitação da regra \texttt{php:S5693}, com a justificativa e a condição de revisão.
