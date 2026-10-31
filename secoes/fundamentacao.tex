@@ -1,0 +1,18 @@
+\section{Fundamentação Teórica}
+\label{sec:fund}
+
+\subsection{Processos de desenvolvimento}
+
+Um processo de software é o conjunto de atividades que leva à produção de um produto de software \cite{sommerville2011}. Modelos prescritivos, como o cascata, organizam as atividades em fases sequenciais. Modelos iterativos e incrementais entregam o produto em ciclos curtos e incorporam realimentação continuamente. Os métodos ágeis, formalizados no Manifesto Ágil \cite{beck2001}, valorizam software funcionando, colaboração e resposta a mudanças em vez de planos rígidos. O Scrumban combina elementos do Scrum, como iterações curtas, com o fluxo contínuo e o limite de trabalho em andamento do Kanban \cite{ladas2009}.
+
+\subsection{Gerência de configuração}
+
+A gerência de configuração controla as mudanças no produto ao longo do tempo, por meio de controle de versões, gerência de mudanças, construção do sistema e gerência de \textit{releases} \cite{sommerville2011}. Em plataformas como o GitHub, esses elementos se materializam em ramos (\textit{branches}), \textit{pull requests} (PRs), revisão de código, \textit{issues} e fluxos de trabalho automatizados. O versionamento semântico (SemVer) comunica o impacto de cada versão por meio de números de versão estruturados.
+
+\subsection{Integração contínua e testes}
+
+A integração contínua (CI) consiste em integrar mudanças com frequência e validá-las por meio de \textit{builds} e testes automatizados. Hilton et al.~\cite{hilton2016} estudaram o uso, os custos e os benefícios da CI em projetos de código aberto e constataram que ela é amplamente adotada e está associada a práticas de teste mais sistemáticas. Os testes se organizam tradicionalmente em níveis: unidade, integração e sistema. A cobertura mede a fração do código executada pelos testes, mas não mede a qualidade das asserções.
+
+\subsection{Qualidade de software}
+
+A norma ISO/IEC 25010 \cite{iso25010} define um modelo de qualidade de produto com características como adequação funcional, confiabilidade, segurança, manutenibilidade e portabilidade. O SonarQube, ferramenta de análise estática usada neste trabalho, mede essas características por meio de \textit{bugs} (confiabilidade), vulnerabilidades e \textit{security hotspots} (segurança) e \textit{code smells} (manutenibilidade), com notas de A a E. Dívida técnica é o esforço estimado para corrigir os \textit{code smells}. A qualidade de processo é avaliada pela regularidade das entregas, pela rastreabilidade das mudanças e pelo tratamento de defeitos.

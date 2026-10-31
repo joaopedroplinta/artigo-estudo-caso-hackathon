@@ -1,0 +1,8 @@
+\section{Conclusão}
+\label{sec:conc}
+
+Este estudo analisou o sistema de apoio ao 1º Hackathon do IFPR Pinhais como um caso de projeto real de software, relacionando suas práticas aos conceitos de processos, gerência de configuração, qualidade, testes e manutenção. O projeto mostra planejamento explícito, arquitetura que protege as regras de domínio, integração contínua com seis verificações e resultados finais expressivos de qualidade: 93,5\% de cobertura, zero \textit{bugs}, vulnerabilidades e \textit{code smells} e 1,4\% de duplicação. Também revela fragilidades de processo: autoria e revisão concentradas em uma pessoa, \textit{backlog} montado depois do fato, análise estática e testes de \textit{front-end} introduzidos tardiamente e quatro vulnerabilidades aceitas por decisão de projeto.
+
+A principal lição é que bons números finais não substituem práticas contínuas. A qualidade foi alcançada em um esforço de fechamento, e não mantida por um \textit{pipeline} que a exigisse a cada mudança. As recomendações, em especial o Sonar com \textit{Quality Gate} no CI e a revisão obrigatória por pares, atacam essa lacuna.
+
+A análise é interna, baseada em evidências do repositório, e não incluiu entrevistas com a comissão organizadora nem o resultado do uso do sistema no evento real. Como trabalho futuro, propomos medir a satisfação dos usuários após o evento, aplicar testes de mutação aos módulos críticos e repetir a análise após a adoção das recomendações.

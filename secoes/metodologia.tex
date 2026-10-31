@@ -1,0 +1,15 @@
+\section{Metodologia de Análise}
+\label{sec:met}
+
+Adotamos o estudo de caso como método, seguindo as diretrizes de Runeson e Höst~\cite{runeson2009}. A unidade de análise é o repositório do sistema do hackathon, ramo \texttt{main}. A coleta ocorreu em 31 de outubro de 2026 e usou quatro fontes:
+
+\begin{enumerate}
+  \item \textbf{Histórico do Git e API do GitHub}, consultados com a ferramenta \texttt{gh}, para obter \textit{commits}, \textit{tags}, \textit{issues} e PRs;
+  \item \textbf{Documentação do projeto}: plano de projeto (\texttt{PLANO.md}), \textit{changelog}, \textit{backlog}, canvas do problema e mapa de \textit{stakeholders}, diagramas, regras de desenvolvimento e relatórios de revisão de segurança;
+  \item \textbf{Arquivos de automação}, em especial o fluxo de CI em \texttt{.github/workflows/};
+  \item \textbf{Relatório do SonarQube Community}, versão 3, gerado em 31 de outubro de 2026 sobre o \textit{commit} \texttt{b13ba75}, com as suítes de teste Pest (PHP) e Vitest (TypeScript) alimentando os relatórios de cobertura.
+\end{enumerate}
+
+O escopo da análise estática inclui \texttt{app}, \texttt{routes}, \texttt{database}, \texttt{config}, \texttt{resources/js} e \texttt{resources/views}. Ficaram de fora as dependências, os artefatos de \textit{build}, os componentes gerados pelo \textit{shadcn/ui} e os arquivos de teste do \textit{front-end}. Migrations, \textit{seeders}, rotas, configuração e os arquivos de entrada do \textit{front-end} foram excluídos do cálculo de cobertura por serem código declarativo.
+
+Por ser uma análise interna, há ameaças à validade. Os autores avaliam um trabalho que eles mesmos fizeram, o que favorece o viés de confirmação. Para reduzi-lo, privilegiamos evidências objetivas e verificáveis (contagens do repositório, saída de ferramentas e relatórios de terceiros) em vez de impressões, e registramos explicitamente as fragilidades encontradas. Os dados do GitHub têm as limitações conhecidas da mineração de repositórios \cite{kalliamvakou2014}: contagens de \textit{commits} não medem esforço, e a autoria registrada não reflete necessariamente quem contribuiu em cada tarefa. A cobertura de testes mede execução, não a qualidade das verificações. Por fim, a divisão de papéis entre os integrantes não está no repositório e foi informada pelos próprios autores.

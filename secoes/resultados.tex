@@ -1,0 +1,100 @@
+\section{Resultados da Análise Crítica}
+\label{sec:res}
+
+\subsection{Visão geral do projeto}
+
+O sistema é um monólito em Laravel com Inertia v2, React, TypeScript e Tailwind, sobre PostgreSQL 17, com filas em Redis e e-mail transacional via Resend. Não há API REST: as páginas recebem dados por \texttt{Inertia::render()}, o que mantém um repositório e um \textit{deploy}. O sistema atende cinco papéis (visitante, participante, jurado, organizador e administrador). A Tabela~\ref{tab:metricas} resume as métricas coletadas.
+
+\begin{table}[ht]
+\centering
+\caption{Métricas do repositório (coleta em 31/10/2026)}
+\label{tab:metricas}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Métrica} & \textbf{Valor} \\ \hline
+Período (primeiro e último \textit{commit}) & 06/08 a 31/10/2026 \\ \hline
+\textit{Commits} (ago / set / out) & 243 (177 / 25 / 41) \\ \hline
+Versões no \textit{changelog} & 14 (0.6.0 a 1.3.4) \\ \hline
+PRs abertos e mesclados & 115 de 115 \\ \hline
+\textit{Issues} fechadas / total & 96 / 98 \\ \hline
+Testes Pest (PHP) / Vitest (front) & 674 / 366 \\ \hline
+Linhas de PHP em \texttt{app/} / em \texttt{tests/} & $\approx$13,3 mil / $\approx$13,0 mil \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Processo de desenvolvimento (QP1)}
+
+O projeto começou com um plano escrito (\texttt{PLANO.md}), tratado como documento vivo. Ele define objetivo, \textit{stack}, papéis, modelo de dados, cronograma de oito semanas (uma por \textit{sprint}), decisões travadas, riscos com plano B e uma Definição de Pronto. Esta exige, para cada funcionalidade, \textit{Policy} de autorização, validação em \textit{Form Request}, teste do caminho feliz e de ao menos um erro, layout para celular e estados de vazio, carregamento e erro. O levantamento de requisitos partiu de um canvas de definição do problema e de um mapa de \textit{stakeholders}, que identificam a comissão organizadora como cliente principal, e as histórias de usuário foram organizadas em épicos alinhados às semanas do cronograma.
+
+O processo se aproxima de um modelo incremental com entregas verticais por semana, e os incrementos foram versionados (0.6.0 em 17/08, 1.0.0 em 21/08). A execução, porém, foi mais comprimida que o plano: a versão 1.0.0 saiu 15 dias após o primeiro \textit{commit}, e 73\% dos \textit{commits} (177 de 243) ocorreram em agosto. Depois da 1.0.0, o trabalho passou a manutenção e a endurecimento, com 13 versões adicionais até 22/10.
+
+Na fase final, o grupo adotou Scrumban \cite{ladas2009} no GitHub Projects. Há uma ressalva: o \textit{backlog} documentado em \texttt{docs/backlog.md} afirma registrar o desenvolvimento \textit{como executado}, com datas derivadas do histórico do Git. Ou seja, o quadro foi montado depois do fato, e não conduziu o trabalho.
+
+A divisão de papéis foi a seguinte: o primeiro autor executou o desenvolvimento do código e dos documentos, o segundo autor ficou com as histórias de usuário e o terceiro com a garantia de qualidade (QA).
+
+\subsection{Gerência de configuração (QP2)}
+
+O código usa Git e GitHub com dois ramos de longa duração: \texttt{main} (produção) e \texttt{homologacao}, sincronizado automaticamente a partir da \texttt{main} por um \textit{workflow}. O fluxo documentado é desenvolvimento, homologação e produção, com migração rodando primeiro na homologação e com a regra de que dados de produção, como CPF, nunca vão para ela. As demais práticas observadas são:
+
+\begin{itemize}
+  \item \textbf{Versionamento semântico e \textit{changelog}.} O arquivo \texttt{CHANGELOG.md} segue o formato Keep a Changelog, com 14 versões e referência ao número do PR ou \textit{issue} de cada mudança. Mudanças incompatíveis são sinalizadas, como na 1.3.0, em que envio fora do prazo deixou de concorrer sozinho.
+  \item \textbf{Rastreabilidade.} Foram abertas 98 \textit{issues}, das quais 96 estão fechadas, e todas as 115 PRs foram mescladas. Alterações sensíveis (nota, desclassificação, decisão sobre envio atrasado) ficam registradas em \textit{activity log} com autor e motivo.
+  \item \textbf{Regras de desenvolvimento versionadas.} O repositório traz regras de estrutura, banco, segurança e \textit{front-end}, além de comandos e agentes de apoio ao desenvolvimento.
+  \item \textbf{Documentação de projeto.} Diagramas de entidade-relacionamento, de classes, de casos de uso e de sequência, além de documentos de LGPD (registro das operações de tratamento e termo de designação de encarregado).
+\end{itemize}
+
+Há, no entanto, lacunas. A \texttt{main} tem proteção de \textit{branch} que exige PR e a aprovação dos \textit{checks} ``Lint e tipos'' e ``Testes'', mas com zero aprovações humanas obrigatórias e sem aplicação às contas administradoras, o que permite ao dono contornar a regra. Todas as 115 PRs foram abertas pela mesma conta. Além disso, a homologação antes da produção é uma regra do guia de desenvolvimento, e não do GitHub: o PR \#210 foi mesclado direto na \texttt{main}, e o histórico não mostra o \textit{branch} \texttt{fix/sonar-findings} entrando antes na \texttt{homologacao}.
+
+\subsection{Qualidade de produto e de processo (QP3)}
+
+\textbf{Manutenibilidade e arquitetura.} O sistema segue o padrão Controller, Action e Model: controllers agrupados por público (Público, Participante, Jurado, Organizador), escrita com regra de negócio em classes \texttt{Action} e toda regra de acesso em \textit{Policies}. Decisões de projeto reduzem risco de domínio: o prazo de submissão é sempre comparado com o relógio do servidor, as submissões são versionadas e nada é sobrescrito, a nota é decimal, os resultados são materializados e recalculáveis por comando, e o jurado só enxerga o que lhe foi atribuído. Um anexo do plano descreve uma escada de degradação para o dia do evento (rede instável, envios no último minuto), o que mostra atenção ao requisito de confiabilidade em condições adversas.
+
+\textbf{Análise estática (SonarQube).} A Tabela~\ref{tab:sonar} mostra a evolução entre a primeira análise e a final. O \textit{Quality Gate} está aprovado, com nota A em confiabilidade, segurança e manutenibilidade.
+
+\begin{table}[ht]
+\centering
+\caption{Evolução das métricas no SonarQube}
+\label{tab:sonar}
+\begin{tabular}{|l|r|r|}
+\hline
+\textbf{Métrica} & \textbf{1ª análise} & \textbf{Final} \\ \hline
+\textit{Bugs} & 2 (nota C) & 0 (nota A) \\ \hline
+Vulnerabilidades & 4 (nota C) & 0 (nota A) \\ \hline
+\textit{Code smells} & 12 & 0 \\ \hline
+Dívida técnica & 60 min & 0 min \\ \hline
+Duplicação & 2,6\% & 1,4\% \\ \hline
+Cobertura (PHP e \textit{front}) & 0\% (sem relatório) & 93,5\% \\ \hline
+\end{tabular}
+\end{table}
+
+As correções vieram em PRs específicos: o PR \#210 tratou dois \textit{bugs} (uma \textit{promise} sem tratamento e um PDF de certificado sem título) e doze \textit{code smells} (\texttt{tabIndex} positivo nas telas de login e cadastro). O PR \#214 refatorou a duplicação no \textit{front-end}. As quatro vulnerabilidades iniciais pertencem à regra \texttt{php:S5693} (limite de tamanho de upload) e foram \textbf{aceitas por decisão de projeto}, não corrigidas: cada \textit{Form Request} define limite explícito (2 MB para logo de certificado, 10 MB para regulamento, 25 MB para arquivo de submissão), mas o Sonar considera seguro o limite de 8 MB. Issues aceitas saem do cálculo das notas, o que explica a nota A. A duplicação restante (441 linhas) foi mantida de propósito, pois a diferença entre os \textit{Form Requests} de rascunho e de envio é regra de negócio.
+
+\textbf{Segurança.} O repositório registra verificações de segurança de caixa-preta e autenticadas feitas em 12/10/2026 (35 verificações públicas e casos com sessão de participante). Elas apontaram ausência de cabeçalhos de proteção (\texttt{X-Frame-Options}, CSP com \texttt{frame-ancestors} e \texttt{X-Content-Type-Options}) e entradas malformadas, como e-mail ou CPF enviados em lista e identificador de critério inválido, que provocavam erro 500. Esses casos foram corrigidos e revalidados na homologação, com resposta 422. Uma varredura com Burp na homologação indicou a falta do cabeçalho HSTS, corrigida na versão 1.3.4 (22/10). Não foi demonstrado acesso a dados alheios nem alteração de notas.
+
+\textbf{Qualidade de processo.} A cadência de versões, a taxa de \textit{issues} fechadas (98\%) e o ciclo achado-correção-revalidação das revisões de segurança indicam um processo de correção funcional. Em contraponto, a análise estática só foi executada ao final, e a primeira rodada acusou dois \textit{bugs} e doze \textit{code smells}, estes nas telas de login e cadastro, que são áreas críticas.
+
+\subsection{Testes e manutenção (QP4)}
+
+Duas suítes alimentam a cobertura: Pest, com 674 testes sobre o \textit{back-end} PHP, e Vitest com Testing Library, com 366 testes em 50 arquivos sobre o \textit{front-end}. A cobertura geral no Sonar é de 93,5\% (6.997 linhas a cobrir, 300 descobertas): 97,0\% no PHP e 89,7\% no \textit{front-end}. A Tabela~\ref{tab:cobertura} lista os arquivos de menor cobertura.
+
+\begin{table}[ht]
+\centering
+\caption{Arquivos com menor cobertura (mín. 30 linhas a cobrir e abaixo de 85\%)}
+\label{tab:cobertura}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Arquivo} & \textbf{Cobertura} \\ \hline
+\texttt{app/Support/AppVersion.php} & 63,3\% \\ \hline
+\texttt{resources/js/pages/admin/submissoes/lancar.tsx} & 78,0\% \\ \hline
+\texttt{resources/js/pages/admin/evento/editar.tsx} & 78,5\% \\ \hline
+\texttt{app/Http/Controllers/Public/SubmissionShowcaseController.php} & 78,8\% \\ \hline
+\texttt{app/Http/Requests/Judge/SaveEvaluationDraftRequest.php} & 83,3\% \\ \hline
+\texttt{resources/js/pages/settings/profile.tsx} & 84,2\% \\ \hline
+\end{tabular}
+\end{table}
+
+Alguns pontos exigem leitura crítica. Primeiro, o \textit{front-end} não tinha testes até o PR \#211, aberto em 30/10, um dia antes da análise final, quando o sistema já estava em produção: a cobertura do \textit{front} saiu de 0\% para cerca de 90\% de uma só vez. Segundo, a cobertura geral depende de exclusões declaradas (migrations, \textit{seeders}, rotas, configuração e arquivos de entrada do \textit{front}); sem elas, seria de 85,4\%. Terceiro, o PR \#213 elevou a 100\% os seis \textit{controllers} menos cobertos com 29 testes Pest, um ganho pontual de cobertura.
+
+O CI do GitHub Actions executa, a cada \textit{push} e PR, Pint (formatação PHP), ESLint, Prettier, \texttt{tsc --noEmit}, Vitest e Pest contra um PostgreSQL 17. Ele não mede cobertura (\texttt{coverage: none}) e não executa o Sonar, que foi rodado localmente. O próprio projeto registra que o CI não roda testes de navegador, de modo que o que foi verificado apenas manualmente no navegador não protege contra regressão.
+
+Na manutenção, o \textit{changelog} mostra os três tipos clássicos. Houve evolução (decisão sobre envio atrasado, desclassificação de equipes, v1.3.0), correção (revisões de segurança, v1.3.1 a 1.3.4) e adaptação (migração da fila de \textit{database} para Redis após medir 92\% de uso de CPU contra 13\% com a mesma carga sintética de 500 \textit{jobs}). Restam pendências organizacionais, como a designação de encarregado de dados e o ensaio ao vivo do evento.

@@ -1,0 +1,38 @@
+\section{Discussão e Recomendações}
+\label{sec:disc}
+
+\subsection{Pontos fortes}
+
+\begin{itemize}
+  \item \textbf{Planejamento explícito e verificável.} Plano, decisões travadas, riscos com plano B e Definição de Pronto existem por escrito e foram versionados junto com o código.
+  \item \textbf{Arquitetura com regras de domínio protegidas.} Autorização em \textit{Policies}, validação em \textit{Form Requests}, prazo decidido no servidor e submissões versionadas reduzem o risco de contestação do resultado, que é o risco central do domínio.
+  \item \textbf{Qualidade medida e melhorada.} Entre a primeira análise e a final, \textit{bugs}, vulnerabilidades e \textit{code smells} foram a zero e a duplicação caiu de 2,6\% para 1,4\%.
+  \item \textbf{Cobertura alta com duas suítes.} 1.040 testes e 93,5\% de cobertura, com casos de erro além do caminho feliz, como exige a Definição de Pronto.
+  \item \textbf{Segurança tratada de forma proativa.} Houve verificação de caixa-preta, correção, revalidação e registro dos resultados no repositório.
+  \item \textbf{Rastreabilidade.} \textit{Changelog} por versão, referência a PRs e \textit{issues} e \textit{activity log} de ações sensíveis.
+\end{itemize}
+
+\subsection{Fragilidades}
+
+\begin{itemize}
+  \item \textbf{Concentração de autoria e de revisão.} Todos os 115 PRs partiram da mesma conta e foram mesclados sem revisor identificável nos dados do GitHub. Não há segunda opinião sobre o código, o que reduz o benefício de práticas como revisão por pares.
+  \item \textbf{Processo documentado depois do fato.} O \textit{backlog} em Scrumban foi montado retrospectivamente. O quadro registra, mas não conduziu o trabalho.
+  \item \textbf{Fluxo de entrega não seguido integralmente.} O fluxo exige homologação antes de produção, mas há PR mesclado direto na \texttt{main}, e a proteção de \textit{branch} não obriga revisão humana nem vale para administradores.
+  \item \textbf{Análise estática e testes de \textit{front} tardios.} O Sonar rodou só ao final e fora do CI, e os testes de \textit{front} entraram um dia antes da análise final, com o sistema em produção. Defeitos em telas críticas só foram vistos tarde.
+  \item \textbf{Cobertura não é qualidade dos testes.} Parte considerável dos testes (366 de \textit{front} e 29 de \textit{back}) foi escrita em lotes, com o objetivo explícito de elevar a cobertura. Não há análise de mutação nem testes de ponta a ponta no CI para mostrar que as asserções detectariam falhas reais.
+  \item \textbf{Vulnerabilidades aceitas, não corrigidas.} As quatro ocorrências da regra \texttt{php:S5693} permanecem com limites de 10 MB e 25 MB acima do que o Sonar considera seguro. A decisão é defensável, mas a nota A depende dela.
+  \item \textbf{Uso de IA sem política registrada.} Parte do código, dos testes e dos documentos foi produzida com apoio de assistentes de IA (Claude Code e Codex), sob aprovação do autor responsável, com ciência da docente.
+  O repositório não traz uma política que diga como esse apoio é revisado.
+\end{itemize}
+
+\subsection{Propostas de melhoria}
+
+\begin{enumerate}
+  \item \textbf{Integrar o Sonar ao CI com \textit{Quality Gate} bloqueante}, gerando os relatórios de cobertura (\texttt{pcov} e V8) no próprio \textit{pipeline}, para que regressões de qualidade e de cobertura reprovem o PR.
+  \item \textbf{Reforçar a proteção de \textit{branch} da \texttt{main}}, exigindo ao menos uma aprovação de outro integrante e aplicando a regra também a administradores, e fazer da homologação um \textit{check} obrigatório, e dividir a autoria entre os integrantes para que a revisão por pares exista de fato.
+  \item \textbf{Aplicar testes de mutação} nos módulos de maior risco (cálculo de nota, desempate e prazo) e acrescentar testes de ponta a ponta do fluxo crítico (submissão, avaliação e resultado) no CI.
+  \item \textbf{Escrever testes junto com cada funcionalidade}, inclusive no \textit{front-end}, em vez de em um lote final.
+  \item \textbf{Registrar as decisões como ADRs}, em especial a aceitação da regra \texttt{php:S5693}, com a justificativa e a condição de revisão.
+  \item \textbf{Registrar o uso de IA} em política curta no repositório (o que pode ser gerado, quem revisa) e identificar a contribuição de cada integrante com \texttt{Co-authored-by} e \texttt{.mailmap}.
+  \item \textbf{Conduzir o quadro Scrumban durante o desenvolvimento}, com limite de trabalho em andamento, e não depois dele.
+\end{enumerate}
