@@ -79,17 +79,18 @@ Duas suítes alimentam a cobertura: Pest, com 674 testes sobre o \textit{back-en
 
 \begin{table}[ht]
 \centering
+\small
 \caption{Arquivos com menor cobertura (mín. 30 linhas a cobrir e abaixo de 85\%)}
 \label{tab:cobertura}
-\begin{tabular}{|l|r|}
+\begin{tabular}{|p{6.6cm}|r|r|r|}
 \hline
-\textbf{Arquivo} & \textbf{Cobertura} \\ \hline
-\texttt{app/Support/AppVersion.php} & 63,3\% \\ \hline
-\texttt{resources/js/pages/admin/submissoes/lancar.tsx} & 78,0\% \\ \hline
-\texttt{resources/js/pages/admin/evento/editar.tsx} & 78,5\% \\ \hline
-\texttt{app/Http/Controllers/Public/SubmissionShowcaseController.php} & 78,8\% \\ \hline
-\texttt{app/Http/Requests/Judge/SaveEvaluationDraftRequest.php} & 83,3\% \\ \hline
-\texttt{resources/js/pages/settings/profile.tsx} & 84,2\% \\ \hline
+\textbf{Arquivo} & \textbf{Cobertura} & \textbf{A cobrir} & \textbf{Descob.} \\ \hline
+\path{app/Support/AppVersion.php} & 63,3\% & 30 & 11 \\ \hline
+\path{resources/js/pages/admin/submissoes/lancar.tsx} & 78,0\% & 33 & 3 \\ \hline
+\path{resources/js/pages/admin/evento/editar.tsx} & 78,5\% & 35 & 4 \\ \hline
+\path{app/Http/Controllers/Public/SubmissionShowcaseController.php} & 78,8\% & 33 & 7 \\ \hline
+\path{app/Http/Requests/Judge/SaveEvaluationDraftRequest.php} & 83,3\% & 30 & 5 \\ \hline
+\path{resources/js/pages/settings/profile.tsx} & 84,2\% & 41 & 7 \\ \hline
 \end{tabular}
 \end{table}
 
